@@ -8,7 +8,7 @@ const routes: Routes = [
     loadChildren: () => import('./components/calendar/calendar.module').then(m => m.CalendarModule)
   }, 
   {
-    path: 'reminder',
+    path: 'reminders/:date',
     loadChildren: () => import('./components/new-edit-reminder/new-edit-reminder.module').then(m => m.NewEditReminderModule)
   }, 
   {

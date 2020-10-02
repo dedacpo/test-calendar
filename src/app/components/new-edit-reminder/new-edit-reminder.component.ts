@@ -16,8 +16,8 @@ export class NewEditReminderComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(selectedYearAndMonth({selectedYearAndMonth:{
-      year:'2020',
-      month: '10'
+      year:2020,
+      month: 10
     }}))
 
     this.apiGeocodeService.getCity('americana').subscribe( apiResponse => {
