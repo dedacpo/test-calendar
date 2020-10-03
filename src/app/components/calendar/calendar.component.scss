@@ -1,7 +1,9 @@
 @import './src/variables.scss';
+@import './src/mixins.scss';
 
 #calendar{
     font-weight: bold;
+    margin-bottom: 20px;
     #calendar_header{
         display: flex;
         div{
@@ -29,15 +31,46 @@
         padding: 5px;
     }
 
-    .day:hover{
-        background-color:$second-color-theme;
+    .day.zero-reminders:hover{
+        background-color:$second-color-theme !important;
         cursor: pointer;
     }
-    a,
-    a:hover{
-        text-decoration: none;
-        color: black;
+    .day:not(.zero-reminders):hover{
+      box-shadow:inset 0px 0px 0px 3px $second-color-theme;
+      cursor: pointer;
+  }
+    .reminder{
+      padding: 0 5px;
+      .reminder-item{        
+        font-size: 12px;
+        font-weight: normal;
+        @include reminderTitleWrap;
+      }
     }
+
+    .reminders-container.more-than-4{
+      display: flex;
+      flex-wrap: wrap;
+      height: 71px;
+      overflow: hidden;
+      .reminder{
+        padding: 0 5px;
+        width: 20px;
+        height: 20px;
+        margin:2px; 
+        /*box-shadow:2px 1px 2px 0px rgba(0,0,0,0.75)*/
+      }
+      .reminder-item{
+        display: none;
+      }     
+
+    }
+
+    .elipsis-more{
+      text-align: center;
+    }
+
+    
     
 }
 
@@ -54,6 +87,11 @@
 
 :host ::ng-deep mat-form-field.year{
   width: 60px;
+}
+
+#new-button-div{
+  display: flex;
+  justify-content: center;
 }
 
 

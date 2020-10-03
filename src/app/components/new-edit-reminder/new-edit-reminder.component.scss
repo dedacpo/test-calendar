@@ -6,6 +6,19 @@
     text-align: center;
 }
 
+:host ::ng-deep color-chrome{
+    display: block;
+    margin-bottom: 20px;
+    .saturation{
+        padding-bottom: 20%;
+    }
+    .chrome-picker{
+        width: 100%;
+        box-shadow: none;
+        border: 1px solid #cecece;
+    }
+}
+
 @media screen and (max-width:762px){
     .weather-info{
         margin-top: 30px;

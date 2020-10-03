@@ -4,6 +4,7 @@ import { RemindersRoutingModule } from './reminders-routing.module';
 import { RemindersComponent } from './reminders.component';
 import { OnLoadElementDirective } from 'src/app/shared/directives/onLoadElement.directive';
 
+
 @NgModule({
   imports: [
     CommonModule,

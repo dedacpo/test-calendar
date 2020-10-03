@@ -7,9 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
 import {MatButtonModule} from '@angular/material/button';
-
-
-
+import {MatTooltipModule} from '@angular/material/tooltip'; 
 
 
 @NgModule({
@@ -21,8 +19,8 @@ import {MatButtonModule} from '@angular/material/button';
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
-    MatButtonModule
-    
+    MatButtonModule,
+    MatTooltipModule    
   ],
   declarations: [CalendarComponent]
 })

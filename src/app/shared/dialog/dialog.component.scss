@@ -1,0 +1,12 @@
+:host ::ng-deep .mat-dialog-actions{
+    justify-content: space-around;
+    margin-bottom: 1px;;
+    button{
+        width: 80px;
+    }
+    .dialogCancelar{
+        background-color: #d9d7d7;
+    }
+
+}
+

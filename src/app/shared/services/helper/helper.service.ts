@@ -23,7 +23,7 @@ export class HelperService {
   mapWeatherData(data) {
     return data.daily.map(weatherItem => {
       let weather = new Weather();
-      weather.date = new Date(weatherItem.dt * 1000);
+      weather.date = this.formatDateToyyyyMMdd(new Date(weatherItem.dt * 1000));
       weather.weatherId = weatherItem.weather[0].id;
       weather.weatherMain = weatherItem.weather[0].main;
       weather.weatherDescription = weatherItem.weather[0].description;

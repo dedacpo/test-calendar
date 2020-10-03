@@ -10,6 +10,7 @@ import { ISelectedYearAndMonth } from 'src/app/interfaces/SelectedYearAndMonth.m
 import { ApiGeocodeService } from 'src/app/shared/services/api-geocode/api-geocode.service';
 import { ApiWeatherService } from 'src/app/shared/services/api-weather/api-weather.service';
 import { reminders } from 'src/app/shared/store/store.actions';
+import * as _ from 'underscore';
 
 @Component({
   selector: 'app-new-edit-reminder',
@@ -46,6 +47,8 @@ export class NewEditReminderComponent implements OnInit {
 
   editReminder: Reminder
 
+  changed:boolean = false
+
   ngOnInit() {
 
     if (this.route.snapshot.params.date) {
@@ -55,14 +58,19 @@ export class NewEditReminderComponent implements OnInit {
       this.reminders = result;
       if (this.route.snapshot.params.id) {
         this.editReminder = this.reminders.filter(item => item.id == Number(this.route.snapshot.params.id))[0]
-        this.selectedDate = this.editReminder.date;
-        this.weather = [this.editReminder.weather];
+        this.selectedDate = this.editReminder.date;       
         if (this.editReminder == undefined)
-          this.router.navigate['/'];
+          this.router.navigate(['/']);
       }
     })
 
     this.createForm();
+
+    if(this.editReminder){
+      this.searchWeather();
+      this.reminder.markAllAsTouched();      
+    }
+      
 
     this.storeSubscription.unsubscribe();
 
@@ -73,17 +81,17 @@ export class NewEditReminderComponent implements OnInit {
       date: [this.selectedDate ? this.selectedDate : '', [Validators.required]],
       title: [this.editReminder ? this.editReminder.title : '', [Validators.required]],
       city: [this.editReminder ? this.editReminder.city : '', [Validators.required]],
-      citySelect: ['', [Validators.required]],
-      startTime: [this.editReminder ? this.editReminder.startTime : '', [Validators.required]],
-      endTime: [this.editReminder ? this.editReminder.endTime : '', [Validators.required]],
-      reminderColor: [this.editReminder ? this.editReminder.reminderColor : '', [Validators.required]],
+      citySelect: [''],
+      startTime: [this.editReminder ? this.editReminder.startTime : ''],
+      endTime: [this.editReminder ? this.editReminder.endTime : ''],
+      reminderColor: [this.editReminder ? this.editReminder.reminderColor : '#ffffff', [Validators.required]],
     });
     if (this.editReminder) {
       this.searchCity();
     }
   }
 
-  searchCity() {
+  searchCity() {    
     if (this.reminder.controls['city'].status == 'INVALID')
       return;
     this.apiGeocodeService.getCity(this.reminder.getRawValue().city).subscribe(apiResponse => {
@@ -92,14 +100,23 @@ export class NewEditReminderComponent implements OnInit {
   }
 
   searchWeather() {
-    if (this.reminder.controls['citySelect'].status == 'INVALID')
+    if (this.reminder.controls['citySelect'].status == 'INVALID' && this.editReminder == undefined)
       return;
 
     this.weathers = [];
     this.weather = [];
+    let citySelected;
+    if(this.editReminder)
+      citySelected = {
+        lat: this.editReminder.cityLat,
+        long: this.editReminder.cityLong
+      }
+    else{      
+      citySelected = this.cities[this.reminder.getRawValue().citySelect]
+      this.reminder.patchValue({ city: citySelected.formatted })
+    }
     this.displayWeather = false;
-    const citySelected = this.cities[this.reminder.getRawValue().citySelect]
-    this.reminder.patchValue({ city: citySelected.formatted })
+  
     this.apiWeather.getWeatherFromLatLon(citySelected.lat.toString(), citySelected.long.toString()).subscribe(apiResponse => {
       this.weathers = apiResponse;
       if (this.reminder.controls['date'].status == 'VALID')
@@ -108,12 +125,8 @@ export class NewEditReminderComponent implements OnInit {
   }
 
   findWeatherfromDate() {
-    const splitedDate = this.reminder.getRawValue().date.split('-');
-    const year = Number(splitedDate[0]);
-    const month = Number(splitedDate[1]) - 1;
-    const day = Number(splitedDate[2]);
-    if (this.weather)
-      this.weather = this.weathers.filter(item => item.date.getFullYear() == year && item.date.getMonth() == month && item.date.getDate() == day)
+    const splitedDate = this.reminder.getRawValue().date;
+    this.weather = this.weathers.filter(item => item.date == splitedDate)
     this.displayWeather = true;
   }
 
@@ -125,12 +138,24 @@ export class NewEditReminderComponent implements OnInit {
     })
     this.reminders = newArray;
     reminder = this.reminder.getRawValue();
-    reminder.id = Date.now();
+    reminder.id = this.editReminder ? this.editReminder.id : Date.now();
     reminder.cityLat = this.cities[this.reminder.getRawValue().citySelect].lat;
     reminder.cityLong = this.cities[this.reminder.getRawValue().citySelect].long;
     reminder.weather = this.weather[0];
-    newArray.push(reminder)
+    if(this.editReminder){
+      let index = _.findIndex(this.reminders, {id: this.editReminder.id})
+      if(index > -1){
+        this.reminders[index] = reminder;
+      }
+    }else{
+      newArray.push(reminder)
+    }     
     this.store.dispatch(reminders({ reminders: this.reminders }));
+    this.router.navigate(['/reminders',])
+  }
+
+  changeComplete(value){
+    this.reminder.patchValue({ reminderColor: value.color.hex })
   }
 
 

@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { Reminder } from 'src/app/interfaces/Models/Reminder';
 import { ISelectedYearAndMonth } from 'src/app/interfaces/SelectedYearAndMonth.model';
 import { MONTHS_DICT } from 'src/app/shared/dictionaries/months';
 import { WEEK_DAYS_DICT } from 'src/app/shared/dictionaries/weekDays';
 import { MONTHS_ENUM } from 'src/app/shared/enums/months.enum';
 import { WEEK_DAYS_ENUM } from 'src/app/shared/enums/weekDays.enum';
 import { HelperService } from 'src/app/shared/services/helper/helper.service';
-import { selectedYearAndMonth } from 'src/app/shared/store/store.actions';
+import { selectedYearAndMonth, reminders } from 'src/app/shared/store/store.actions';
 
 
 @Component({
@@ -17,7 +19,10 @@ import { selectedYearAndMonth } from 'src/app/shared/store/store.actions';
 })
 export class CalendarComponent implements OnInit {
 
-  constructor(private store: Store<{ selectedYearAndMonth: ISelectedYearAndMonth }>, public helper: HelperService, private formBuilder: FormBuilder,) { }
+  constructor(
+    private store: Store<{ selectedYearAndMonth: ISelectedYearAndMonth,  reminders: Reminder[] }>, 
+    public helper: HelperService, 
+    private formBuilder: FormBuilder,) { }
 
   selectedYearAndMonth: ISelectedYearAndMonth
 
@@ -33,18 +38,30 @@ export class CalendarComponent implements OnInit {
 
   datePicker: FormGroup
 
-  storeSubscription;
+  storeSubscriptionSelectedYearAndMonth;
+  storeSubscriptionReminders;
+
+  allReminders: Reminder[]
+
+  public config: PerfectScrollbarConfigInterface = {
+    
+  };
 
 
-  ngOnInit(): void {    
-    this.storeSubscription = this.store.select('selectedYearAndMonth').subscribe((result: ISelectedYearAndMonth) => {
+  ngOnInit(): void {  
+   
+    this.storeSubscriptionSelectedYearAndMonth = this.store.select('selectedYearAndMonth').subscribe((result: ISelectedYearAndMonth) => {
       if (Object.keys(result).length > 0) {
-        this.selectedYearAndMonth = result;
-      } else {        
+        this.selectedYearAndMonth = {
+          year: Number(result.year),
+          month: Number(result.month)
+        };
+      } else {     
         this.selectedYearAndMonth = {
           year:new Date().getFullYear(),
           month:new Date().getMonth()
         }
+      
         this.store.dispatch(selectedYearAndMonth({
           selectedYearAndMonth: {
             year: this.selectedYearAndMonth.year,
@@ -52,15 +69,22 @@ export class CalendarComponent implements OnInit {
           }
         }))
       }
-      this.createForm();
-      this.createCalendar();
+      this.storeSubscriptionReminders = this.store.select('reminders').subscribe((result: Reminder[]) => {
+        this.allReminders = result;
+        this.createForm();
+        this.createCalendar();
+      })
+      
       
     })
-    this.storeSubscription.unsubscribe();
+    this.storeSubscriptionSelectedYearAndMonth.unsubscribe();
+    this.storeSubscriptionReminders.unsubscribe();
+
 
 
 
   }
+  
 
   createCalendar() {
     const year = this.selectedYearAndMonth.year;
@@ -82,7 +106,7 @@ export class CalendarComponent implements OnInit {
           completeDate: date,
           highlighted: false,
           weekDay: WEEK_DAYS_DICT[date.getDay()],
-          reminders: this.helper.getRemindersFromDate(date)
+          reminders: this.getRemindersFromDate(date)
         })
       }
     }
@@ -95,7 +119,7 @@ export class CalendarComponent implements OnInit {
         completeDate: date,
         highlighted: true,
         weekDay: WEEK_DAYS_DICT[date.getDay()],
-        reminders: this.helper.getRemindersFromDate(date)
+        reminders: this.getRemindersFromDate(date)
       })
     }
 
@@ -109,11 +133,10 @@ export class CalendarComponent implements OnInit {
           completeDate: date,
           highlighted: false,
           weekDay: WEEK_DAYS_DICT[date.getDay()],
-          reminders: this.helper.getRemindersFromDate(date)
+          reminders: this.getRemindersFromDate(date)
         })
       }
     }
-
   }
 
   createForm() {
@@ -136,5 +159,22 @@ export class CalendarComponent implements OnInit {
     this.createCalendar();
   }
 
+  getRemindersFromDate(date){
+    let formattedDate =  this.helper.formatDateToyyyyMMdd(date)
+    return this.allReminders.filter(item => item.date == formattedDate)
+  }
+
+  getTextColorForBackgroundColor(hexcolor){
+    hexcolor = hexcolor.replace("#", "");
+    var r = parseInt(hexcolor.substr(0,2),16);
+    var g = parseInt(hexcolor.substr(2,2),16);
+    var b = parseInt(hexcolor.substr(4,2),16);
+    var yiq = ((r*299)+(g*587)+(b*114))/1000;
+    return (yiq >= 128) ? 'black' : 'white';
+}
+
+getAmount(elem){  
+  return (elem.clientWidth/24)*3
+}
 
 }

@@ -1,2 +1,14 @@
-<router-outlet></router-outlet>
+<div id="spinner" *ngIf="HTTPActivity" class="display-flex">
+    <mat-spinner class="margin-auto"></mat-spinner>
+</div>
+
+<div (window:resize)="onResized()" [ngStyle]="{'min-height': clientHeight + 'px', 'margin-bottom': '-200px'}">
+    <app-top-bar></app-top-bar>
+    <router-outlet (activate)="onActivate()"></router-outlet>
+    <div style="height: 200px"></div>
+</div>
+
+<app-footer></app-footer>
+
+
 

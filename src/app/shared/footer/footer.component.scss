@@ -1,0 +1,26 @@
+footer{
+    margin-top:50px;
+    padding: 30px;
+    background-color: #0a0a0a;
+    color:white;
+    .links{
+        a{
+            color: white !important;
+        }
+        div:not(:first-of-type){
+            margin-top: 10px;
+        }
+    }
+   
+}
+
+@media screen and (max-width:569px){
+    footer{
+        .links{
+            div{
+                margin-top: 10px;
+            }
+        }
+    }
+   
+}

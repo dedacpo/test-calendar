@@ -31,7 +31,9 @@
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/underscore/underscore-min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -99,7 +101,9 @@
               "./node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/underscore/underscore-min.js"
+            ]
           }
         },
         "lint": {

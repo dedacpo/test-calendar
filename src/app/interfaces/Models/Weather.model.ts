@@ -1,5 +1,5 @@
 export class Weather{
-    date: Date
+    date: string
     weatherId: number
     weatherMain: string
     weatherDescription: string
