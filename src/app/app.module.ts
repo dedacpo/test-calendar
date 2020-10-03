@@ -22,7 +22,8 @@ import * as storeReducers from './shared/store/store.reducer';
     AppRoutingModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({
-      selectedYearAndMonth: storeReducers.selectedYearAndMonthReducer
+      selectedYearAndMonth: storeReducers.selectedYearAndMonthReducer,
+      reminders: storeReducers.remindersReducer
     })
   ],
   providers: [

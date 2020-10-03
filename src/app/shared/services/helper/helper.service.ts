@@ -21,7 +21,6 @@ export class HelperService {
   }
 
   mapWeatherData(data) {
-    console.log("data", data)
     return data.daily.map(weatherItem => {
       let weather = new Weather();
       weather.date = new Date(weatherItem.dt * 1000);

@@ -9,8 +9,20 @@ const routes: Routes = [
   }, 
   {
     path: 'reminders/:date',
-    loadChildren: () => import('./components/new-edit-reminder/new-edit-reminder.module').then(m => m.NewEditReminderModule)
+    loadChildren: () => import('./components/reminders/reminders.module').then(m => m.RemindersModule)
   }, 
+  {
+    path: 'reminders-new/:date',
+    loadChildren: () => import('./components/new-edit-reminder/new-edit-reminder.module').then(m => m.NewEditReminderModule)
+  },
+  {
+    path: 'reminders-new',
+    loadChildren: () => import('./components/new-edit-reminder/new-edit-reminder.module').then(m => m.NewEditReminderModule)
+  },
+  {
+    path: 'reminders-edit/:id',
+    loadChildren: () => import('./components/new-edit-reminder/new-edit-reminder.module').then(m => m.NewEditReminderModule)
+  },
   {
     path: '**',redirectTo: ''   
   },

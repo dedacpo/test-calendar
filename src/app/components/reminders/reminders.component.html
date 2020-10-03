@@ -1,0 +1,79 @@
+<section>
+    <div class="container">
+        <h1>Reminders for {{weekDaysDict[selectedDate.getDay()]}}, {{selectedDate.getDate()}}
+            {{monthsDict[selectedDate.getMonth()]}} {{selectedDate.getFullYear()}}
+
+            <a [routerLink]="['/reminders-new',route.snapshot.params.date]">
+                <button><i class="fas fa-plus"></i></button>
+            </a>        
+        </h1>
+        
+
+        <div id="reminderContainer">
+            <div class="reminder-item card position-relative" *ngFor="let reminder of reminders; let i = index">
+                <div class="options position-absolute">
+                    <i (click)="deleteReminder(i)" class="fas fa-trash-alt"></i>
+                    <a [routerLink]="['/reminders-edit',reminder.id]"><i
+                            class="fas fa-pencil-alt"></i></a>
+                </div>
+                <div class="row margin-top-20px">
+                    <div class="col-lg-8 col-md-6 col-sm-12 col-12">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 field-name">
+                                <b>Title</b>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                {{reminder.title}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 field-name">
+                                <b>City</b>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                {{reminder.city}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 field-name">
+                                <b>Start time</b>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                {{reminder.startTime}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 field-name">
+                                <b>End time</b>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12">
+                                {{reminder.endTime}}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12 field-name">
+                                <b>Reminder color</b>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-12  reminder-color">
+                                <span
+                                    [ngStyle]="{'background-color':reminder.reminderColor}"></span>{{reminder.reminderColor}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12 col-12 weather-info display-flex" 
+                        (onLoadElement)="getWeather(reminder)">
+                        <div class="margin-auto" *ngIf="reminder.weather">
+                            <b>Weather information for the city</b><br />
+                            <img src="http://openweathermap.org/img/wn/{{reminder.weather.weatherIcon}}@2x.png" />
+                            <p>{{reminder.weather.weatherMain}} ({{reminder.weather.weatherDescription}})</p>
+                        </div>
+                        <div class="margin-auto" *ngIf="reminder.weather == undefined">
+                            <b><i>No weather information was provided from API for the selected date (only information for 7 days)</i></b><br />                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

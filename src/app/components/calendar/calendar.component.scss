@@ -13,14 +13,15 @@
     }
     .not-highlighted span{
         opacity: .4;
+        color: black;
     }
     .Saturday,
     .Sunday{
-        background-color: #f2f2f2;
+        background-color: #f2f2f2 !important;
     }
     .Saturday:not(.not-highlighted),
     .Sunday:not(.not-highlighted){
-        color: $highlight-font-color;        
+        color: $highlight-font-color !important;        
     }
     .day{
         height: 120px;
@@ -35,9 +36,26 @@
     a,
     a:hover{
         text-decoration: none;
+        color: black;
     }
     
 }
+
+#date_picker{
+  margin-top: 20px;
+  form{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 400px;
+    margin: auto;
+  }
+}
+
+:host ::ng-deep mat-form-field.year{
+  width: 60px;
+}
+
 
 @media screen and (min-width: 1px){
     .seven-cols .col-1,

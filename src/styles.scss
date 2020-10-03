@@ -1,0 +1,34 @@
+@import './src/variables.scss';
+
+.display-flex{
+    display: flex;
+}
+
+.margin-auto{
+    margin: auto;
+}
+
+.position-relative{
+    position: relative;
+}
+
+.position-absolute{
+    position: absolute;
+}
+
+.margin-top-20px{
+    margin-top: 20px !important;
+}
+
+button{
+    border:none;
+    padding: 10px;
+    font-weight: bold;
+    height: 50px;
+    background-color: $first-color-theme;
+    color: white;
+}
+
+button:disabled{
+    opacity: 0.2;
+}

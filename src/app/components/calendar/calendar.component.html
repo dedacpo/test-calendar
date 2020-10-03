@@ -1,4 +1,23 @@
 <div class="container">
+    <div id="date_picker">
+        <form [formGroup]="datePicker" (ngSubmit)="defineDate()">
+            <mat-form-field appearance="fill" class="year">
+                <mat-label>Year*</mat-label>
+                <input matInput formControlName="year" maxlength="4" />
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+                <mat-label>Month*</mat-label>
+                <mat-select formControlName="month">
+                    <mat-option *ngFor="let month of monthsArray; let i = index" [value]="i">
+                        {{monthsDict[i]}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <button [disabled]="datePicker.status == 'INVALID'" type="submit">change</button>
+        </form>
+
+    </div>
     <div id="calendar" *ngIf="days.length">
         <div class="row seven-cols" id="calendar_header">
             <div class="col-lg-1 col-md-1 col-sm-1 col-1" *ngFor="let item of weekDaysArray; let i = index">
@@ -6,7 +25,8 @@
             </div>
         </div>
         <div id="calendar_body" class="row seven-cols">
-            <a [routerLink]="['/reminders', helper.formatDateToyyyyMMdd(day.completeDate)]" class="col-lg-1 col-md-1 col-sm-1 col-1 day {{day.weekDay}}" *ngFor="let day of days; let i = index">
+            <a [routerLink]="['/reminders', helper.formatDateToyyyyMMdd(day.completeDate)]"
+                class="col-lg-1 col-md-1 col-sm-1 col-1 day {{day.weekDay}}" *ngFor="let day of days; let i = index">
                 <div [ngClass]="{'not-highlighted' : !day.highlighted}">
                     <span>{{day.value}}</span>
                 </div>

@@ -1,0 +1,13 @@
+:host ::ng-deep .mat-form-field{
+    width: 100%;
+}
+
+.weather-info{
+    text-align: center;
+}
+
+@media screen and (max-width:762px){
+    .weather-info{
+        margin-top: 30px;
+    }
+}
