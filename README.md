@@ -1,4 +1,4 @@
-# test Calendar (API Open WeatherAPI and OpenCageGeocode API)
+# test Calendar (OpenCageGeocode API and Open WeatherAPI)
 
 This project was developed by Denise Calsavara Paiva de Oliveira.
 
@@ -9,6 +9,8 @@ Requests to OpenCage Geocode API (https://opencagedata.com/) to get the cities t
 Requests to Open Weather API (https://openweathermap.org/) to get the daily weather (for 7 days only) from the lat and long
 
 Lazy Loading
+
+Ngrx to manage the application state (it was used for save the current selected year and month and to save all the reminders)
 
 Angular Material
 
@@ -27,4 +29,4 @@ Run `ng serve` to serve the application under localhost. Navigate to `http://loc
 
 
 ## Hosting
-The app was also host on GitHub Pages. Acess https://dedacpo.github.io/test-calendar/ to check it out.
+The app was also hosted at GitHub Pages. Acess https://dedacpo.github.io/test-calendar/ to check it out.
