@@ -10,6 +10,8 @@ Requests to Open Weather API (https://openweathermap.org/) to get the daily weat
 
 Lazy Loading
 
+Ngrx to manage the application state (it was used for save the current selected year and month and to save all the reminders)
+
 Angular Material
 
 Bootstrap
