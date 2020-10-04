@@ -1,21 +1,22 @@
 <section class="main-content">
     <div class="container">
         <div id="date_picker">
-            <form [formGroup]="datePicker" (ngSubmit)="defineDate()">
-                <mat-form-field appearance="fill" class="year">
+            <form [formGroup]="datePicker" class="row">
+                <mat-form-field appearance="fill" class="year col-lg-3 md-6 col-sm-6 col-12">
                     <mat-label>Year*</mat-label>
                     <input matInput formControlName="year" maxlength="4" />
                 </mat-form-field>
-                <mat-form-field appearance="fill">
+                <mat-form-field appearance="fill" class="col-lg-5 md-6 col-sm-6 col-12">
                     <mat-label>Month*</mat-label>
                     <mat-select formControlName="month">
-                        <mat-option *ngFor="let month of monthsArray; let i = index" [value]="i">
+                        <mat-option (click)="defineDate()" *ngFor="let month of monthsArray; let i = index" [value]="i">
                             {{monthsDict[i]}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-    
-                <button [disabled]="datePicker.status == 'INVALID'" type="submit">change</button>
+                <div class="year col-lg-4 md-12 col-sm-12 col-12">
+                    <a [routerLink]="['/reminders-new']" id="new-reminder" type="button"><button type="button">new reminder</button></a>
+                </div>
             </form>
     
         </div>       
@@ -30,11 +31,14 @@
                     class="col-lg-1 col-md-1 col-sm-1 col-1 day {{day.weekDay}} {{day.reminders.length == 0 ? 'zero-reminders' : ''}}" *ngFor="let day of days; let i = index">
                     <div [ngClass]="{'not-highlighted' : !day.highlighted}">
                         <span>{{day.value}}</span>
-                        <div class="reminders-container {{day.reminders.length > 4 ? 'more-than-4' : ''}}"  #elem>
-                            <div matTooltip={{reminder.title}} class="reminder" *ngFor="let reminder of day.reminders" [ngStyle]="{'background-color': reminder.reminderColor}">
-                                <div class="reminder-item" [ngStyle]="{'color': getTextColorForBackgroundColor(reminder.reminderColor)}">{{reminder.title}}</div>
+                        <div style="display:flex; justify-content:center">
+                            <div class="reminders-container {{day.reminders.length > 4 ? 'more-than-4' : ''}}"  #elem>
+                                <div matTooltip={{reminder.title}} class="reminder" *ngFor="let reminder of day.reminders" [ngStyle]="{'background-color': reminder.reminderColor}">
+                                    <div class="reminder-item" [ngStyle]="{'color': getTextColorForBackgroundColor(reminder.reminderColor)}">{{reminder.title}}</div>
+                                </div>
                             </div>
                         </div>
+                        
                         <div *ngIf="day.reminders.length > getAmount(elem) && day.reminders.length > 4"  class="elipsis-more">
                             <i class="fas fa-ellipsis-h"></i>
                         </div>                       
@@ -43,9 +47,7 @@
     
             </div>
         </div>
-        <div id="new-button-div">
-            <a [routerLink]="['/reminders-new']" type="button"><button>new reminder</button></a>
-        </div>
+       
     </div>
 </section>
 

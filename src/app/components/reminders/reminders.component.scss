@@ -28,14 +28,21 @@
     i{
         margin-left: 35px;
         cursor: pointer;
-    }
-    
+    }    
 }
 
 a,
 a:hover{
     color: black;
     text-decoration: none;
+}
+
+.detelete-all{
+    text-align: right;
+    font-weight: bold;
+    a{
+        cursor: pointer;
+    }
 }
 
 @media screen and (max-width:762px){

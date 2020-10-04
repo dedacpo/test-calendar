@@ -39,7 +39,7 @@ export class RemindersComponent implements OnInit {
   allReminders: Reminder[]
 
   storeSubscription
-  
+
 
   ngOnInit(): void {
     let splitedDate = this.route.snapshot.params.date.split('-')
@@ -70,7 +70,7 @@ export class RemindersComponent implements OnInit {
 
   getWeather(reminder, i) {
     this.apiWeather.getWeatherFromLatLon(reminder.cityLat.toString(), reminder.cityLong.toString()).subscribe(apiResponse => {
-      this.reminders[i].weather = _.findWhere(apiResponse, {date:reminder.date});     
+      this.reminders[i].weather = _.findWhere(apiResponse, { date: reminder.date });
     });
   }
 
@@ -79,21 +79,42 @@ export class RemindersComponent implements OnInit {
       data: { title: 'Delete reminder', content: `Are you sure you want to delete the reminder <b>"${reminder.title}"</b>?` }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.getPerformResult(reminder,i,result);
+      this.getPerformResult(reminder, i, result);
 
     });
   }
 
-  getPerformResult(reminder,i,result){
+  deleteAllReminders() {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: { title: 'Delete all reminders', content: `Are you sure you want to delete ALL the reminders for this date?` }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.getPerformResultDeleteAll(result);
+    });
+  }
+
+  getPerformResult(reminder, i, result) {
     if (result) {
-      let allRemindersCopy =  JSON.parse(JSON.stringify(this.allReminders));
-      let remindersCopy =  JSON.parse(JSON.stringify(this.reminders));
+      let allRemindersCopy = JSON.parse(JSON.stringify(this.allReminders));
+      let remindersCopy = JSON.parse(JSON.stringify(this.reminders));
       let position = _.findIndex(allRemindersCopy, { id: reminder.id })
       allRemindersCopy.splice(position, 1);
       remindersCopy.splice(i, 1);
       this.reminders = remindersCopy;
       this.allReminders = allRemindersCopy;
       this.store.dispatch(reminders({ reminders: allRemindersCopy }));
+    }
+  }
+
+  getPerformResultDeleteAll(result) {
+    if (result) {
+      let newAllReminders = []
+      this.allReminders.forEach((value, i) => {
+        if (_.find(this.reminders, { id: value.id }) == undefined)
+          newAllReminders.push(value);
+      })
+      this.reminders = []
+      this.store.dispatch(reminders({ reminders: newAllReminders }));
     }
   }
 

@@ -32,25 +32,25 @@ describe('RemindersComponent', () => {
   }
 
   let apiWeatherStub = {
-    getWeatherFromLatLon: () => of([{date:'2020-10-11', weather:new Weather()}])
+    getWeatherFromLatLon: () => of([{ date: '2020-10-11', weather: new Weather() }])
   }
 
   let matDialogStub = {
-    open: ()=>{}
+    open: () => { }
   }
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RemindersComponent ],
-      providers:[        
+      declarations: [RemindersComponent],
+      providers: [
         { provide: MatDialog, useValue: matDialogStub },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: Store, useValue: storeStub },
         { provide: ApiWeatherService, useValue: apiWeatherStub },
 
-        
+
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -66,43 +66,76 @@ describe('RemindersComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get weather for reminder', () => {  
+  it('should get weather for reminder', () => {
     let newReminder = new Reminder();
     component.reminders = [
       newReminder
-    ] 
+    ]
     let reminder = {
-      cityLat:40, 
-      cityLong:40,
-      date:'2020-10-11'
+      cityLat: 40,
+      cityLong: 40,
+      date: '2020-10-11'
 
     }
     component.getWeather(reminder, 0);
     fixture.detectChanges();
-    expect(component.reminders[0].weather).toEqual({date:'2020-10-11',weather:new Weather()}as any);
+    expect(component.reminders[0].weather).toEqual({ date: '2020-10-11', weather: new Weather() } as any);
   });
 
-  it('should perform the deletion',()=>{
+  it('should perform the deletion', () => {
     let reminder = {
-      id:0
+      id: 0
     }
     let newReminder = new Reminder()
     newReminder.id = 0;
     component.allReminders = [newReminder]
-    component.getPerformResult(reminder,0,true);
+    component.getPerformResult(reminder, 0, true);
     expect(component.allReminders.length).toEqual(0)
   })
 
-  it('should not perform the deletion',()=>{
+  it('should not perform the deletion', () => {
     let reminder = {
-      id:0
+      id: 0
     }
     let newReminder = new Reminder()
     newReminder.id = 0;
     component.allReminders = [newReminder]
-    component.getPerformResult(reminder,0,false);
+    component.getPerformResult(reminder, 0, false);
     expect(component.allReminders.length).toEqual(1)
   })
 
-  
+  it('should perform the deletion for all reminders', () => {
+    component.allReminders = [
+      { id: 0 } as Reminder,
+      { id: 1 } as Reminder,
+      { id: 3 } as Reminder,
+      { id: 4 } as Reminder
+    ]
+
+    component.reminders = [
+      { id: 0 } as Reminder,
+      { id: 1 } as Reminder
+    ]
+    component.getPerformResultDeleteAll(true);
+    expect(component.allReminders.length).toEqual(2);
+    expect(component.reminders.length).toEqual(0)
+  })
+
+  it('should not perform the deletion for all reminders', () => {
+    component.allReminders = [
+      { id: 0 } as Reminder,
+      { id: 1 } as Reminder,
+      { id: 3 } as Reminder,
+      { id: 4 } as Reminder
+    ]
+
+    component.reminders = [
+      { id: 0 } as Reminder,
+      { id: 1 } as Reminder
+    ]
+    component.getPerformResultDeleteAll(false);
+    expect(component.allReminders.length).toEqual(4);
+    expect(component.reminders.length).toEqual(2)
+  })
+
 });

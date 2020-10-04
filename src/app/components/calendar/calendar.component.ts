@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Reminder } from 'src/app/interfaces/Models/Reminder';
@@ -19,8 +19,8 @@ import { selectedYearAndMonth, reminders } from 'src/app/shared/store/store.acti
 export class CalendarComponent implements OnInit {
 
   constructor(
-    private store: Store<{ selectedYearAndMonth: ISelectedYearAndMonth,  reminders: Reminder[] }>, 
-    public helper: HelperService, 
+    private store: Store<{ selectedYearAndMonth: ISelectedYearAndMonth, reminders: Reminder[] }>,
+    public helper: HelperService,
     private formBuilder: FormBuilder,) { }
 
   selectedYearAndMonth: ISelectedYearAndMonth
@@ -42,21 +42,21 @@ export class CalendarComponent implements OnInit {
 
   allReminders: Reminder[] = []
 
- 
-  ngOnInit(): void {  
-   
+
+  ngOnInit(): void {
+
     this.storeSubscriptionSelectedYearAndMonth = this.store.select('selectedYearAndMonth').subscribe((result: ISelectedYearAndMonth) => {
-      if (Object.keys(result).length > 0) {        
+      if (Object.keys(result).length > 0) {
         this.selectedYearAndMonth = {
           year: Number(result.year),
           month: Number(result.month)
         };
-      } else {     
+      } else {
         this.selectedYearAndMonth = {
-          year:new Date().getFullYear(),
-          month:new Date().getMonth()
+          year: new Date().getFullYear(),
+          month: new Date().getMonth()
         }
-      
+
         this.store.dispatch(selectedYearAndMonth({
           selectedYearAndMonth: {
             year: this.selectedYearAndMonth.year,
@@ -69,17 +69,12 @@ export class CalendarComponent implements OnInit {
         this.createForm();
         this.createCalendar();
       })
-      
-      
+
     })
     this.storeSubscriptionSelectedYearAndMonth.unsubscribe();
     this.storeSubscriptionReminders.unsubscribe();
-
-
-
-
   }
-  
+
 
   createCalendar() {
     const year = this.selectedYearAndMonth.year;
@@ -91,7 +86,6 @@ export class CalendarComponent implements OnInit {
     let daysInMonth = 32 - new Date(year, month, 32).getDate();
     const lastDay = (new Date(year, month, daysInMonth)).getDay();
 
-    //adding the days from previous month when the selected month doesn't starts at the first day of week (sunday)
     if (firstDay > WEEK_DAYS_ENUM.Sunday) {
       const lastDayPreviousMonth = 32 - new Date(month - 1 < MONTHS_ENUM.January ? year - 1 : year, month - 1 < MONTHS_ENUM.January ? MONTHS_ENUM.December : month - 1, 32).getDate()
       for (let i = firstDay - 1; i >= 0; i--) {
@@ -106,7 +100,6 @@ export class CalendarComponent implements OnInit {
       }
     }
 
-    //adding the days from select month
     for (let i = 0; i < daysInMonth; i++) {
       const date = new Date(year, month, i + 1);
       this.days.push({
@@ -118,7 +111,6 @@ export class CalendarComponent implements OnInit {
       })
     }
 
-    //adding the days from next month when the selected month doesn't ends at the last day of week (saturday)      
     if (lastDay < WEEK_DAYS_ENUM.Saturday) {
       const fistDayNextMonth = WEEK_DAYS_ENUM.Saturday - lastDay;
       for (let i = 0; i < fistDayNextMonth; i++) {
@@ -143,7 +135,7 @@ export class CalendarComponent implements OnInit {
 
   }
 
-  defineDate(){
+  defineDate() {
     this.selectedYearAndMonth = this.datePicker.getRawValue();
     this.store.dispatch(selectedYearAndMonth({
       selectedYearAndMonth: {
@@ -154,22 +146,22 @@ export class CalendarComponent implements OnInit {
     this.createCalendar();
   }
 
-  getRemindersFromDate(date){
-    let formattedDate =  this.helper.formatDateToyyyyMMdd(date)
-    return this.allReminders.length ?  this.allReminders.filter(item => item.date == formattedDate) : []
+  getRemindersFromDate(date) {
+    let formattedDate = this.helper.formatDateToyyyyMMdd(date)
+    return this.allReminders.length ? this.allReminders.filter(item => item.date == formattedDate) : []
   }
 
-  getTextColorForBackgroundColor(hexcolor){
+  getTextColorForBackgroundColor(hexcolor) {
     hexcolor = hexcolor.replace("#", "");
-    var r = parseInt(hexcolor.substr(0,2),16);
-    var g = parseInt(hexcolor.substr(2,2),16);
-    var b = parseInt(hexcolor.substr(4,2),16);
-    var yiq = ((r*299)+(g*587)+(b*114))/1000;
+    var r = parseInt(hexcolor.substr(0, 2), 16);
+    var g = parseInt(hexcolor.substr(2, 2), 16);
+    var b = parseInt(hexcolor.substr(4, 2), 16);
+    var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
     return (yiq >= 128) ? 'black' : 'white';
-}
+  }
 
-getAmount(elem){  
-  return (elem.clientWidth/24)*3
-}
+  getAmount(elem) {
+    return (elem.clientWidth / 28) * 3
+  }
 
 }

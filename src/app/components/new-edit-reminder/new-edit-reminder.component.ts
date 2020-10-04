@@ -73,17 +73,14 @@ export class NewEditReminderComponent implements OnInit {
     if(this.editReminder){
       this.searchWeather();
       this.reminder.markAllAsTouched();      
-    }
-      
-
+    }      
     this.storeSubscription.unsubscribe();
-
   }
 
   createForm() {
     this.reminder = this.formBuilder.group({
       date: [this.selectedDate ? this.selectedDate : '', [Validators.required]],
-      title: [this.editReminder ? this.editReminder.title : '', [Validators.required]],
+      title: [this.editReminder ? this.editReminder.title : '', [Validators.required, Validators.maxLength(30)]],
       city: [this.editReminder ? this.editReminder.city : '', [Validators.required]],
       citySelect: [''],
       startTime: [this.editReminder ? this.editReminder.startTime : ''],

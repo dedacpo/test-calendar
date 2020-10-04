@@ -3,7 +3,10 @@
 
 #calendar{
     font-weight: bold;
-    margin-bottom: 20px;
+    margin: 20px 0;
+    .row{
+      margin: 0 15px;
+    }
     #calendar_header{
         display: flex;
         div{
@@ -11,6 +14,7 @@
             text-align: center;
             background-color: $first-color-theme;
             color: white;
+            @include reminderTitleWrap(1, 30px);
         }
     }
     .not-highlighted span{
@@ -28,7 +32,7 @@
     .day{
         height: 120px;
         border:1px solid #d7d7d7;
-        padding: 5px;
+        padding: 5px;        
     }
 
     .day.zero-reminders:hover{
@@ -44,8 +48,12 @@
       .reminder-item{        
         font-size: 12px;
         font-weight: normal;
-        @include reminderTitleWrap;
+        @include reminderTitleWrap(1, 20px);
       }
+    }
+
+    .reminders-container{
+      width: 100%;
     }
 
     .reminders-container.more-than-4{
@@ -53,25 +61,21 @@
       flex-wrap: wrap;
       height: 71px;
       overflow: hidden;
+      max-width: 120px;;
       .reminder{
         padding: 0 5px;
         width: 20px;
         height: 20px;
         margin:2px; 
-        /*box-shadow:2px 1px 2px 0px rgba(0,0,0,0.75)*/
       }
       .reminder-item{
         display: none;
-      }     
-
+      }    
     }
 
     .elipsis-more{
       text-align: center;
-    }
-
-    
-    
+    } 
 }
 
 #date_picker{
@@ -80,7 +84,6 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    max-width: 400px;
     margin: auto;
   }
 }
@@ -89,9 +92,11 @@
   width: 60px;
 }
 
-#new-button-div{
-  display: flex;
-  justify-content: center;
+#new-reminder{
+ width: 100%;
+  button{
+    width: 100%;
+  }
 }
 
 
@@ -127,11 +132,7 @@
       flex:none !important;
     }
   }
-  
-  /**
-   *  The following is not really needed in this case
-   *  Only to demonstrate the usage of @media for large screens
-   */    
+
   @media screen and (min-width: 1200px) {
     .seven-cols .col-1,
     .seven-cols .col-md-1,

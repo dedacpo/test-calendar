@@ -63,7 +63,6 @@ describe('NewEditReminderComponent', () => {
     fixture.detectChanges();
     store = fixture.debugElement.injector.get(Store);
     apiGeocodeService = fixture.debugElement.injector.get(ApiGeocodeService);
-
   });
 
   it('should create', () => {
@@ -103,6 +102,11 @@ describe('NewEditReminderComponent', () => {
     component.editReminder = undefined;
     component.searchWeather();
     expect(component.displayWeather).toEqual(false);
+  });
+
+  it('should invalidate the form if title is more than 30 characters', () => {
+    component.reminder.controls.title.setValue("this phrase is much more longer than the 30 characters allowed, so the form should be invalid");
+    expect(component.reminder.valid).toEqual(false);
   })
 
 
@@ -139,23 +143,23 @@ describe('NewEditReminderComponent', () => {
       value
     ]
     component.weather = [{
-      date:'2020-10-03',
-      weatherId:800,
-      weatherMain:"Rain",
+      date: '2020-10-03',
+      weatherId: 800,
+      weatherMain: "Rain",
       weatherDescription: 'Strong rain',
-      weatherIcon:'11d'
+      weatherIcon: '11d'
     }];
     component.reminders = [
       {
         id: 1,
         cityLat: 40,
         cityLong: 40,
-        title:'teste',
-        city:'americana',
-        startTime:"15:00",
-        endTime:"20:00",
-        date:"2020-01-01",
-        reminderColor:"#0000",
+        title: 'teste',
+        city: 'americana',
+        startTime: "15:00",
+        endTime: "20:00",
+        date: "2020-01-01",
+        reminderColor: "#0000",
         weather: new Weather()
       }
     ]
@@ -164,7 +168,7 @@ describe('NewEditReminderComponent', () => {
     expect(routerStub.navigate).toHaveBeenCalledWith(['/reminders']);
   })
 
-  
+
   it('should save and navigate to home 2', () => {
     component.reminder.controls.citySelect.setValue(0);
     let value = { lat: 40, long: 40, formatted: "americana" } as City;
@@ -172,65 +176,65 @@ describe('NewEditReminderComponent', () => {
       value
     ]
     component.weather = [{
-      date:'2020-10-03',
-      weatherId:800,
-      weatherMain:"Rain",
+      date: '2020-10-03',
+      weatherId: 800,
+      weatherMain: "Rain",
       weatherDescription: 'Strong rain',
-      weatherIcon:'11d'
+      weatherIcon: '11d'
     }];
     component.reminders = [
       {
         id: 0,
         cityLat: 40,
         cityLong: 40,
-        title:'teste',
-        city:'americana',
-        startTime:"15:00",
-        endTime:"20:00",
-        date:"2020-01-01",
-        reminderColor:"#0000",
+        title: 'teste',
+        city: 'americana',
+        startTime: "15:00",
+        endTime: "20:00",
+        date: "2020-01-01",
+        reminderColor: "#0000",
         weather: new Weather()
       }
     ]
-    component.editReminder = {id:0} as Reminder
+    component.editReminder = { id: 0 } as Reminder
     fixture.detectChanges()
     component.saveReminder();
     expect(routerStub.navigate).toHaveBeenCalledWith(['/reminders']);
   })
 
-  it('should patch value when changeComplete be called', ()=>{
-    component.changeComplete({color:{hex:"#ffffff"}})
+  it('should patch value when changeComplete be called', () => {
+    component.changeComplete({ color: { hex: "#ffffff" } })
     expect(component.reminder.getRawValue().reminderColor).toEqual("#ffffff")
   })
 
-  it('create form with editReminder', ()=>{
-    const spy = spyOn(component,'searchCity');
+  it('create form with editReminder', () => {
+    const spy = spyOn(component, 'searchCity');
     component.editReminder = {
-      title:'teste',
-      city:'americana',
-      startTime:'20:00',
-      endTime:'22:00',
-      reminderColor:"#ffffff"
+      title: 'teste',
+      city: 'americana',
+      startTime: '20:00',
+      endTime: '22:00',
+      reminderColor: "#ffffff"
     } as Reminder
     fixture.detectChanges()
     component.createForm();
     expect(spy).toHaveBeenCalled();
   })
 
-  it('create form with selected date', ()=>{
-    const spy = spyOn(component,'searchCity');
+  it('create form with selected date', () => {
+    const spy = spyOn(component, 'searchCity');
     component.selectedDate = undefined;
     component.editReminder = {
-      title:'teste',
-      city:'americana',
-      startTime:'20:00',
-      endTime:'22:00',
-      reminderColor:"#ffffff"
+      title: 'teste',
+      city: 'americana',
+      startTime: '20:00',
+      endTime: '22:00',
+      reminderColor: "#ffffff"
     } as Reminder
     fixture.detectChanges()
     component.createForm();
     expect(spy).toHaveBeenCalled();
   })
-  
+
 
 });
