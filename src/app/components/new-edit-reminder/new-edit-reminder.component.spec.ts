@@ -108,6 +108,22 @@ describe('NewEditReminderComponent', () => {
     component.reminder.controls.title.setValue("this phrase is much more longer than the 30 characters allowed, so the form should be invalid");
     expect(component.reminder.valid).toEqual(false);
   })
+  it('should invalidate the form if title is blank', () => {
+    component.reminder.controls.title.setValue("");
+    expect(component.reminder.valid).toEqual(false);
+  })
+  it('should invalidate the form if city is blank', () => {
+    component.reminder.controls.city.setValue("");
+    expect(component.reminder.valid).toEqual(false);
+  })
+  it('should invalidate the form if start time is blank', () => {
+    component.reminder.controls.startTime.setValue("");
+    expect(component.reminder.valid).toEqual(false);
+  })
+  it('should invalidate the form if end time is blank', () => {
+    component.reminder.controls.endTime.setValue("");
+    expect(component.reminder.valid).toEqual(false);
+  })
 
 
   it('should set displaWeather to true when search weather is caled and edit reminder exists', () => {

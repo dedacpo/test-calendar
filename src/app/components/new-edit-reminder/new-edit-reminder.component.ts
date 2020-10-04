@@ -83,8 +83,8 @@ export class NewEditReminderComponent implements OnInit {
       title: [this.editReminder ? this.editReminder.title : '', [Validators.required, Validators.maxLength(30)]],
       city: [this.editReminder ? this.editReminder.city : '', [Validators.required]],
       citySelect: [''],
-      startTime: [this.editReminder ? this.editReminder.startTime : ''],
-      endTime: [this.editReminder ? this.editReminder.endTime : ''],
+      startTime: [this.editReminder ? this.editReminder.startTime : '',[Validators.required]],
+      endTime: [this.editReminder ? this.editReminder.endTime : '',[Validators.required]],
       reminderColor: [this.editReminder ? this.editReminder.reminderColor : '#ffffff', [Validators.required]],
     });
     if (this.editReminder) {
@@ -138,7 +138,6 @@ export class NewEditReminderComponent implements OnInit {
     this.reminders.map(item => {
       newArray.push(item)
     })
-    this.reminders = newArray;
     reminder = this.reminder.getRawValue();
     reminder.id = this.editReminder ? this.editReminder.id : Date.now();
     reminder.date = this.helper.formatDateToyyyyMMdd(this.reminder.getRawValue().date);
@@ -148,11 +147,15 @@ export class NewEditReminderComponent implements OnInit {
     if(this.editReminder){
       let index = _.findIndex(this.reminders, {id: this.editReminder.id})
       if(index > -1){
-        this.reminders[index] = reminder;
+        newArray[index] = reminder;
       }
     }else{
       newArray.push(reminder)
-    }     
+    }         
+    this.reminders = newArray;
+    this.reminders.sort((a,b)=>{
+      return a.startTime.localeCompare(b.startTime);
+    })
     this.store.dispatch(reminders({ reminders: this.reminders }));
     this.router.navigate(['/reminders'])
   }
