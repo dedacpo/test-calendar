@@ -57,10 +57,14 @@ export class NewEditReminderComponent implements OnInit {
     this.storeSubscription = this.store.select('reminders').subscribe((result: Reminder[]) => {
       this.reminders = result;
       if (this.route.snapshot.params.id) {
-        this.editReminder = this.reminders.filter(item => item.id == Number(this.route.snapshot.params.id))[0]
-        this.selectedDate = this.editReminder.date;       
-        if (this.editReminder == undefined)
+        this.editReminder = _.findWhere(this.reminders, {id: Number(this.route.snapshot.params.id)})  
+        console.log(this.reminders) 
+        if (this.editReminder == undefined){
           this.router.navigate(['/']);
+          return;
+        }
+         
+        this.selectedDate = this.editReminder.date;       
       }
     })
 
@@ -77,6 +81,7 @@ export class NewEditReminderComponent implements OnInit {
   }
 
   createForm() {
+    console.log("ediReminder", this.editReminder)
     this.reminder = this.formBuilder.group({
       date: [this.selectedDate ? this.selectedDate : '', [Validators.required]],
       title: [this.editReminder ? this.editReminder.title : '', [Validators.required]],
@@ -106,12 +111,15 @@ export class NewEditReminderComponent implements OnInit {
     this.weathers = [];
     this.weather = [];
     let citySelected;
-    if(this.editReminder)
+    if(this.editReminder){
+      console.log("edi")
       citySelected = {
         lat: this.editReminder.cityLat,
         long: this.editReminder.cityLong
       }
-    else{      
+    }      
+    else{   
+      console.log("else")   
       citySelected = this.cities[this.reminder.getRawValue().citySelect]
       this.reminder.patchValue({ city: citySelected.formatted })
     }
@@ -126,7 +134,7 @@ export class NewEditReminderComponent implements OnInit {
 
   findWeatherfromDate() {
     const splitedDate = this.reminder.getRawValue().date;
-    this.weather = this.weathers.filter(item => item.date == splitedDate)
+    this.weather = _.where({date: splitedDate})
     this.displayWeather = true;
   }
 
@@ -151,7 +159,7 @@ export class NewEditReminderComponent implements OnInit {
       newArray.push(reminder)
     }     
     this.store.dispatch(reminders({ reminders: this.reminders }));
-    this.router.navigate(['/reminders',])
+    this.router.navigate(['/reminders'])
   }
 
   changeComplete(value){

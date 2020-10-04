@@ -56,7 +56,7 @@ describe('HelperService', () => {
     };
     let result = service.mapWeatherData(response);
     let expectVar = new Weather();
-    expectVar.date = new Date(response.daily[0].dt * 1000);
+    expectVar.date = "2020-10-01";
     expectVar.weatherId = response.daily[0].weather[0].id;
     expectVar.weatherMain = response.daily[0].weather[0].main;
     expectVar.weatherDescription = response.daily[0].weather[0].description;

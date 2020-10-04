@@ -41,7 +41,7 @@ export class CalendarComponent implements OnInit {
   storeSubscriptionSelectedYearAndMonth;
   storeSubscriptionReminders;
 
-  allReminders: Reminder[]
+  allReminders: Reminder[] = []
 
   public config: PerfectScrollbarConfigInterface = {
     
@@ -51,7 +51,7 @@ export class CalendarComponent implements OnInit {
   ngOnInit(): void {  
    
     this.storeSubscriptionSelectedYearAndMonth = this.store.select('selectedYearAndMonth').subscribe((result: ISelectedYearAndMonth) => {
-      if (Object.keys(result).length > 0) {
+      if (Object.keys(result).length > 0) {        
         this.selectedYearAndMonth = {
           year: Number(result.year),
           month: Number(result.month)
@@ -161,7 +161,7 @@ export class CalendarComponent implements OnInit {
 
   getRemindersFromDate(date){
     let formattedDate =  this.helper.formatDateToyyyyMMdd(date)
-    return this.allReminders.filter(item => item.date == formattedDate)
+    return this.allReminders.length ?  this.allReminders.filter(item => item.date == formattedDate) : []
   }
 
   getTextColorForBackgroundColor(hexcolor){

@@ -24,7 +24,6 @@ export class AppComponent implements OnInit, AfterContentChecked{
 
   constructor(
     private store: Store<{ reminders: Reminder[] }>,
-    private helper: HelperService,
     private httpStatus: HTTPStatus, 
     private cdr: ChangeDetectorRef,
   ){

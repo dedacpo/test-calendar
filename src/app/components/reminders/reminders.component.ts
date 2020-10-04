@@ -39,6 +39,7 @@ export class RemindersComponent implements OnInit {
   allReminders: Reminder[]
 
   storeSubscription
+  
 
   ngOnInit(): void {
     let splitedDate = this.route.snapshot.params.date.split('-')
@@ -52,51 +53,48 @@ export class RemindersComponent implements OnInit {
     this.store.dispatch(selectedYearAndMonth({
       selectedYearAndMonth: {
         year: this.selectedDate.year,
-        month: Number(this.selectedDate.month)-1
+        month: Number(this.selectedDate.month) - 1
       }
-    }))  
+    }))
 
 
-    this.storeSubscription = this.store.select('reminders').subscribe((result: Reminder[]) => {      
+    this.storeSubscription = this.store.select('reminders').subscribe((result: Reminder[]) => {
       this.allReminders = JSON.parse(JSON.stringify(result));
-      this.reminders = this.allReminders.filter(item => item.date == this.route.snapshot.params.date)
+      this.reminders = _.where(this.allReminders, { date: this.route.snapshot.params.date })
     })
     this.storeSubscription.unsubscribe();
-   
+
 
   }
 
-  
-  getWeather(reminder,i) {  
-    let interval  = setInterval(()=>{
-      if(this.storeSubscription){
-        this.apiWeather.getWeatherFromLatLon(reminder.cityLat.toString(), reminder.cityLong.toString()).subscribe(apiResponse => {
-          this.reminders[i].weather = apiResponse.filter(item => item.date == reminder.date)[0];
-        });
-    
-        clearInterval(interval)
-      }
-    },100) 
-    
+
+  getWeather(reminder, i) {
+    this.apiWeather.getWeatherFromLatLon(reminder.cityLat.toString(), reminder.cityLong.toString()).subscribe(apiResponse => {
+      this.reminders[i].weather = _.findWhere(apiResponse, {date:reminder.date});     
+    });
   }
 
-  deleteReminder(reminder,i){
+  deleteReminder(reminder, i) {
     const dialogRef = this.dialog.open(DialogComponent, {
       data: { title: 'Delete reminder', content: `Are you sure you want to delete the reminder <b>"${reminder.title}"</b>?` }
     });
     dialogRef.afterClosed().subscribe(result => {
-      if(result){
-        let position = _.findIndex(this.allReminders, {id: reminder.id})
-        this.allReminders.splice(position, 1);
-        this.reminders.splice(i,1)
-        this.store.dispatch(reminders({ reminders: this.allReminders }));
-      }        
+      this.getPerformResult(reminder,i,result);
 
     });
   }
 
-  get monthAsNumber(){
-    return Number(this.selectedDate.month) -1
+  getPerformResult(reminder,i,result){
+    if (result) {
+      let position = _.findIndex(this.allReminders, { id: reminder.id })
+      this.allReminders.splice(position, 1);
+      this.reminders.splice(i, 1)
+      this.store.dispatch(reminders({ reminders: this.allReminders }));
+    }
+  }
+
+  get monthAsNumber() {
+    return Number(this.selectedDate.month) - 1
   }
 
 }
