@@ -86,10 +86,14 @@ export class RemindersComponent implements OnInit {
 
   getPerformResult(reminder,i,result){
     if (result) {
-      let position = _.findIndex(this.allReminders, { id: reminder.id })
-      this.allReminders.splice(position, 1);
-      this.reminders.splice(i, 1)
-      this.store.dispatch(reminders({ reminders: this.allReminders }));
+      let allRemindersCopy =  JSON.parse(JSON.stringify(this.allReminders));
+      let remindersCopy =  JSON.parse(JSON.stringify(this.reminders));
+      let position = _.findIndex(allRemindersCopy, { id: reminder.id })
+      allRemindersCopy.splice(position, 1);
+      remindersCopy.splice(i, 1);
+      this.reminders = remindersCopy;
+      this.allReminders = allRemindersCopy;
+      this.store.dispatch(reminders({ reminders: allRemindersCopy }));
     }
   }
 

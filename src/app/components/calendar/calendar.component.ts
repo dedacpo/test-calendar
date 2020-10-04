@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Reminder } from 'src/app/interfaces/Models/Reminder';
 import { ISelectedYearAndMonth } from 'src/app/interfaces/SelectedYearAndMonth.model';
 import { MONTHS_DICT } from 'src/app/shared/dictionaries/months';
@@ -43,11 +42,7 @@ export class CalendarComponent implements OnInit {
 
   allReminders: Reminder[] = []
 
-  public config: PerfectScrollbarConfigInterface = {
-    
-  };
-
-
+ 
   ngOnInit(): void {  
    
     this.storeSubscriptionSelectedYearAndMonth = this.store.select('selectedYearAndMonth').subscribe((result: ISelectedYearAndMonth) => {

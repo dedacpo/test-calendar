@@ -9,6 +9,7 @@ import { Weather } from 'src/app/interfaces/Models/Weather.model';
 import { ISelectedYearAndMonth } from 'src/app/interfaces/SelectedYearAndMonth.model';
 import { ApiGeocodeService } from 'src/app/shared/services/api-geocode/api-geocode.service';
 import { ApiWeatherService } from 'src/app/shared/services/api-weather/api-weather.service';
+import { HelperService } from 'src/app/shared/services/helper/helper.service';
 import { reminders } from 'src/app/shared/store/store.actions';
 import * as _ from 'underscore';
 
@@ -25,11 +26,12 @@ export class NewEditReminderComponent implements OnInit {
     private store: Store<{ selectedYearAndMonth: ISelectedYearAndMonth, reminders: Reminder[] }>,
     private apiGeocodeService: ApiGeocodeService,
     private apiWeather: ApiWeatherService,
-    private router: Router
+    private router: Router,
+    private helper: HelperService
   ) { }
 
 
-  selectedDate: string
+  selectedDate: Date
 
   reminder: FormGroup
 
@@ -51,20 +53,18 @@ export class NewEditReminderComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.route.snapshot.params.date) {
-      this.selectedDate = this.route.snapshot.params.date;
-    }
+    this.selectedDate = new Date(this.route.snapshot.params.date + 'T00:00:00');
+    
     this.storeSubscription = this.store.select('reminders').subscribe((result: Reminder[]) => {
       this.reminders = result;
       if (this.route.snapshot.params.id) {
         this.editReminder = _.findWhere(this.reminders, {id: Number(this.route.snapshot.params.id)})  
-        console.log(this.reminders) 
         if (this.editReminder == undefined){
           this.router.navigate(['/']);
           return;
         }
          
-        this.selectedDate = this.editReminder.date;       
+        this.selectedDate = new Date(this.editReminder.date + 'T00:00:00');       
       }
     })
 
@@ -81,7 +81,6 @@ export class NewEditReminderComponent implements OnInit {
   }
 
   createForm() {
-    console.log("ediReminder", this.editReminder)
     this.reminder = this.formBuilder.group({
       date: [this.selectedDate ? this.selectedDate : '', [Validators.required]],
       title: [this.editReminder ? this.editReminder.title : '', [Validators.required]],
@@ -112,14 +111,12 @@ export class NewEditReminderComponent implements OnInit {
     this.weather = [];
     let citySelected;
     if(this.editReminder){
-      console.log("edi")
       citySelected = {
         lat: this.editReminder.cityLat,
         long: this.editReminder.cityLong
       }
     }      
     else{   
-      console.log("else")   
       citySelected = this.cities[this.reminder.getRawValue().citySelect]
       this.reminder.patchValue({ city: citySelected.formatted })
     }
@@ -133,8 +130,8 @@ export class NewEditReminderComponent implements OnInit {
   }
 
   findWeatherfromDate() {
-    const splitedDate = this.reminder.getRawValue().date;
-    this.weather = _.where({date: splitedDate})
+    const splitedDate = this.helper.formatDateToyyyyMMdd(this.reminder.getRawValue().date);
+    this.weather = _.where(this.weathers,{date: splitedDate})
     this.displayWeather = true;
   }
 
@@ -147,8 +144,9 @@ export class NewEditReminderComponent implements OnInit {
     this.reminders = newArray;
     reminder = this.reminder.getRawValue();
     reminder.id = this.editReminder ? this.editReminder.id : Date.now();
-    reminder.cityLat = this.cities[this.reminder.getRawValue().citySelect].lat;
-    reminder.cityLong = this.cities[this.reminder.getRawValue().citySelect].long;
+    reminder.date = this.helper.formatDateToyyyyMMdd(this.reminder.getRawValue().date);
+    reminder.cityLat = this.editReminder ? this.editReminder.cityLat : this.cities[this.reminder.getRawValue().citySelect].lat;
+    reminder.cityLong = this.editReminder ? this.editReminder.cityLong : this.cities[this.reminder.getRawValue().citySelect].long;
     reminder.weather = this.weather[0];
     if(this.editReminder){
       let index = _.findIndex(this.reminders, {id: this.editReminder.id})

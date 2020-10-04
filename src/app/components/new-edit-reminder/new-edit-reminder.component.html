@@ -16,8 +16,10 @@
           </div>
           <div class="form-item">
             <mat-form-field appearance="fill">
-              <mat-label>Date*</mat-label>
-              <input (change)="findWeatherfromDate()" matInput formControlName="date" type="date" />
+              <mat-label>Date</mat-label>
+              <input (dateInput)="findWeatherfromDate()" readonly (click)="picker1.open()" matInput [matDatepicker]="picker1" formControlName="date">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
             </mat-form-field>
           </div>
           <div class="form-item row">
@@ -68,7 +70,7 @@
               <p>{{weather[0].weatherMain}} ({{weather[0].weatherDescription}})</p>
             </div>           
           </div>
-          <div class="margin-auto"  *ngIf="weather && weather.length == 0 && displayWeather">
+          <div class="margin-auto"  *ngIf="weather && weather.length == 0 && displayWeather  && weathers && weathers.length">
             <b><i>No weather information was provided from API for the selected date (only information for 7 days)</i></b>                       
           </div>
         </div>
