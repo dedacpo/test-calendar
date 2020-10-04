@@ -114,6 +114,7 @@ export class RemindersComponent implements OnInit {
           newAllReminders.push(value);
       })
       this.reminders = []
+      this.allReminders = newAllReminders;
       this.store.dispatch(reminders({ reminders: newAllReminders }));
     }
   }
