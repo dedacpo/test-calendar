@@ -1,4 +1,4 @@
-# test Calendar (API Open WeatherAPI and OpenCageGeocode API)
+# test Calendar (Open WeatherAPI and OpenCageGeocode API)
 
 This project was developed by Denise Calsavara Paiva de Oliveira.
 
