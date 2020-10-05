@@ -1,4 +1,4 @@
-# Calendar (OpenCageGeocode API and Open WeatherAPI)
+# Calendar (OpenCage Geocode API and Open WeatherAPI)
 
 This project was developed by Denise Calsavara Paiva de Oliveira for demo proposes and knowledge prove.
 
