@@ -29,7 +29,7 @@
                 <input (focusout)="searchCity(); changed = true;" matInput formControlName="city" />
               </mat-form-field>
             </div>
-            <div class="col-lg-6 col-md-12 col-sm-12 col-12" *ngIf="editReminder == undefined && changed">
+            <div class="col-lg-6 col-md-12 col-sm-12 col-12" *ngIf="editReminder == undefined || changed">
               <mat-form-field appearance="fill">
                 <mat-label>Select the city</mat-label>
                 <mat-select formControlName="citySelect">
