@@ -10,7 +10,7 @@ import { HelperService } from '../helper/helper.service';
 })
 export class ApiGeocodeService {
 
-  private KEY = '03a36efc57c9401cb16cd4e23b0527c4';
+  private KEY = 'ce5375e72d294ab79f45fcc7e9259571';
   private URL_API = 'https://api.opencagedata.com/geocode/v1/json';
 
   constructor(private http: HttpClient, private helper: HelperService) { }
